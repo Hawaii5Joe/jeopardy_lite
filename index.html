@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>JEOPARDY LITE</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- My Css file -->
+  <link rel="stylesheet" type="text/css" href="assets/stylesheets/jeopardy_styles.css" />
+  <!-- My Css file -->
+</head>
+
+<body>
+
+<!-- CONTESTANT FIELDS--> <!-- #IDs -category, value, question, submit, submit_it, player_money -->
+
+<div class="contestant_fields">
+  <!-- CATEGORY -->
+  <h3>CATEGORY</h3> <div id="category"></div>
+
+  <!-- POINTS -->
+  <h3>VALUE</h3> <div id="value"></div>
+
+  <!-- QUESTION -->
+  <h3>QUESTION</h3> <div id="question"></div>
+
+  <!-- ANSWER BOX -->
+  <div>
+    <div><textarea id="submit" style="width:500px;height:200px;"></textarea></div>
+    <div><button id="submit_it">SUBMIT IT</button>
+  </div>
+
+  <!-- MONEY BOX -->
+ MONEY IN THE BANK: $<span id="player_money">0</span><br>
+ </div>
+
+  <!-- Links and crap -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  <!-- THINKING STUFF -->
+  <script>
+    (function() {
+
+      $(function() {
+
+        let the_answer;
+        let the_money;
+
+        function getQuestion(){
+          $.get("http://jservice.io/api/random", function(data) {
+            // console.log(JSON.stringify(data));
+            console.log(data[0].question);
+            console.log(data[0].category);
+            console.log(data[0].value);
+            // displaying relevant question info from API call
+            $('#question').html(data[0].question)
+            $('#category').html(data[0].category.title)
+            $('#value').html(data[0].value)
+            the_answer=data[0].answer
+            the_money=data[0].value
+            console.log(the_answer)
+
+            })
+
+        }
+
+        getQuestion();
+          // AJAX request to get question
+
+          // Declaring function intentions
+          function getText() {
+            return $('#submit').val();
+          }
+          // acting on my intentions
+          $('#submit_it').click(function(){
+            user_answer = getText();
+            console.log(user_answer);
+
+            if(user_answer==the_answer){
+              $("#player_money").html(parseInt($("#player_money").html()) + the_money)
+            }
+
+          // clearing the answer box
+            $('#submit').val('');
+            getQuestion();
+          })
+
+
+
+      })
+
+
+    })()
+  </script>
+</body>
+
+</html>
